@@ -16,6 +16,7 @@ use Cycle\ORM\PromiseFactoryInterface;
 use Doctrine\Instantiator\Instantiator;
 use Spiral\Database\Config\DatabaseConfig;
 use Cycle\ORM\Promise\Declaration\Extractor;
+use Psr\Container\ContainerInterface;
 
 
 class DatabaseConfigProvider
