@@ -31,8 +31,7 @@ class DatabaseConfigProvider
                 [
                      DatabaseManager::class => static function(ContainerInterface $c)
                      {
-                         $config = new DatabaseConfig($c->get('config')['database']['config']);
-                         return new DatabaseManager($config);
+                         return new DatabaseManager(new DatabaseConfig($c->get('config')['database']['config']));
                      },
 
                      SchemaInterface::class => static function(ContainerInterface $c)
