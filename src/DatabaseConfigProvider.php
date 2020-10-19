@@ -48,7 +48,7 @@ class DatabaseConfigProvider
 
                      ORMInterface::class => static function(ContainerInterface $c)
                      {
-                         return (new ORM(new Factory($c->get(DatabaseManager::class))))
+                         return (new ORM(new Factory($c->get(DatabaseManager::class), null, null, $c)))
                              ->withSchema($c->get(SchemaInterface::class))
                              ->withPromiseFactory($c->get(PromiseFactoryInterface::class));
                      }
