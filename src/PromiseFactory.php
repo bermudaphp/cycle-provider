@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace Bermuda\Provider;
 
 
 use Psr\Container\ContainerInterface;
@@ -8,7 +8,7 @@ use Psr\Container\ContainerInterface;
 
 /**
  * Class PromiseFactory
- * @package App
+ * @package Bermuda\Provider
  */
 final class PromiseFactory
 {
