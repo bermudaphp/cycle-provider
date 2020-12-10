@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace Bermuda\Provider;
 
 
 use PhpParser\Parser;
@@ -14,7 +14,7 @@ use Cycle\ORM\Promise\Declaration\Extractor;
 
 /**
  * Class PromiseFactory
- * @package App
+ * @package Bermuda\Provider
  */
 final class PromiseProxyFactory
 {
