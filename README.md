@@ -1,4 +1,4 @@
 # Install
 ```bash
-composer require bermudaphp/db-provider
+composer require bermudaphp/cycle-provider
 ````
