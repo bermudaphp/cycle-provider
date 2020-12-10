@@ -1,7 +1,6 @@
 <?php
 
-
-namespace App;
+namespace Bermuda\Provider;
 
 
 use Psr\Container\ContainerInterface;
@@ -11,7 +10,7 @@ use Spiral\Database\DatabaseManager;
 
 /**
  * Class DatabaseManagerFactory
- * @package App
+ * @package Bermuda\Provider
  */
 final class DatabaseManagerFactory
 {
