@@ -1,5 +1,5 @@
 {
-    "name": "bermudaphp/db-provider",
+    "name": "bermudaphp/cycle-provider",
     "license": "MIT",
     "autoload": {
         "psr-4": {
