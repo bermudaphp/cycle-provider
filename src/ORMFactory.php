@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace Bermuda\Provider;
 
 
 use Cycle\ORM\Factory;
@@ -13,7 +13,7 @@ use Psr\Container\ContainerInterface;
 
 /**
  * Class ORMFactory
- * @package App
+ * @package Bermuda\Provider
  */
 final class ORMFactory
 {
