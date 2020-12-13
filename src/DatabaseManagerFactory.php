@@ -3,6 +3,7 @@
 namespace Bermuda\Provider;
 
 
+use Cycle\ORM\Exception\ConfigException;
 use Psr\Container\ContainerInterface;
 use Spiral\Database\Config\DatabaseConfig;
 use Spiral\Database\DatabaseManager;
@@ -20,6 +21,13 @@ final class DatabaseManagerFactory
      */
     public function __invoke(ContainerInterface $container): DatabaseManager
     {
-        return new DatabaseManager(new DatabaseConfig($container->get('config')['cycle']['config']));
+        $config = $container->get('config');
+
+        if (!isset($config['cycle']))
+        {
+            throw new ConfigException('Expected config databases');
+        }
+
+        return new DatabaseManager(new DatabaseConfig($config['cycle'][0]));
     }
 }
