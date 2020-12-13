@@ -3,12 +3,15 @@
 namespace Bermuda\Provider;
 
 
-use Cycle\ORM\Factory;
 use Cycle\ORM\ORM;
+use Cycle\ORM\Factory;
 use Cycle\ORM\ORMInterface;
+use Cycle\ORM\SchemaInterface;
 use Spiral\Core\FactoryInterface;
+use Spiral\Database\DatabaseManager;
 use Cycle\ORM\Config\RelationConfig;
 use Psr\Container\ContainerInterface;
+use Cycle\ORM\PromiseFactoryInterface;
 
 
 /**
@@ -24,25 +27,14 @@ final class ORMFactory
     public function __invoke(ContainerInterface $container): ORMInterface
     {
         return (new ORM(new Factory($container->get(DatabaseManager::class),
-                $this->getRelationConfig(),
-                $this->getSpiralFactory(),
+                RelationConfig::getDefault(), $this->getSpiralFactory($container),
                 $container
             )
         ))
             ->withSchema($container->get(SchemaInterface::class))
             ->withPromiseFactory($container->get(PromiseFactoryInterface::class));
     }
-
-    /**
-     * @param ContainerInterface $container
-     * @return RelationConfig|null
-     */
-    private function getRelationConfig(ContainerInterface $container):? RelationConfig
-    {
-        return $container->has(RelationConfig::class) ?
-            $container->get(RelationConfig::class) : null;
-    }
-
+    
     /**
      * @param ContainerInterface $container
      * @return FactoryInterface|null
