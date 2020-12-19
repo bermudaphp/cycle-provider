@@ -19,6 +19,6 @@ final class SchemaFactory
      */
     public function __invoke(ContainerInterface $container): Schema
     {
-        return new Schema($container->get('config')['cycle'][0] ?? []);
+        return new Schema($container->get('config')['cycle'][1] ?? []);
     }
 }
