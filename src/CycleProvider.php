@@ -1,6 +1,6 @@
 <?php
 
-namespace Bermuda\Provider;
+namespace Bermuda\Cycle;
 
 
 use Cycle\ORM\ORMInterface;
@@ -13,7 +13,7 @@ use Spiral\Database\DatabaseManager;
  * Class CycleProvider
  * @package Bermuda\Provider
  */
-class CycleProvider extends ConfigProvider
+class ConfigProvider extends Bermuda\Config\ConfigProvider
 {
     protected function getFactories(): array
     {
