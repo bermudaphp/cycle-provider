@@ -3,11 +3,11 @@
     "license": "MIT",
     "autoload": {
         "psr-4": {
-            "Bermuda\\Provider\\": "src/"
+            "Bermuda\\Cycle\\": "src/"
         }
     },
     "require": {
-        "bermudaphp/provider": "^1.0.0",
+        "bermudaphp/config": "^1.0.0",
         "php": ">= 7.4",
         "cycle/orm": "^1.2.12",
         "cycle/proxy-factory": "^1.2.1"
