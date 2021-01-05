@@ -1,6 +1,6 @@
 <?php
 
-namespace Bermuda\Provider;
+namespace Bermuda\Cycle;
 
 
 use Cycle\ORM\ORM;
