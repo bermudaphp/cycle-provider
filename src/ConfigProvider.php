@@ -13,7 +13,7 @@ use Spiral\Database\DatabaseManager;
  * Class CycleProvider
  * @package Bermuda\Provider
  */
-class ConfigProvider extends Bermuda\Config\ConfigProvider
+class ConfigProvider extends \Bermuda\Config\ConfigProvider
 {
     protected function getFactories(): array
     {
