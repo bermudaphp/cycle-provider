@@ -11,7 +11,7 @@ use Spiral\Database\DatabaseManager;
 
 /**
  * Class CycleProvider
- * @package Bermuda\Provider
+ * @package Bermuda\Cycle
  */
 class ConfigProvider extends \Bermuda\Config\ConfigProvider
 {
