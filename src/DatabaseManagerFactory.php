@@ -1,6 +1,6 @@
 <?php
 
-namespace Bermuda\Provider;
+namespace Bermuda\Cycle;
 
 
 use Cycle\ORM\Exception\ConfigException;
@@ -11,7 +11,7 @@ use Spiral\Database\DatabaseManager;
 
 /**
  * Class DatabaseManagerFactory
- * @package Bermuda\Provider
+ * @package Bermuda\Cycle
  */
 final class DatabaseManagerFactory
 {
