@@ -1,6 +1,6 @@
 <?php
 
-namespace Bermuda\Provider;
+namespace Bermuda\Cycle;
 
 
 use Cycle\ORM\Schema;
@@ -9,7 +9,7 @@ use Psr\Container\ContainerInterface;
 
 /**
  * Class SchemaFactory
- * @package Bermuda\Provider
+ * @package Bermuda\Cycle
  */
 final class SchemaFactory
 {
