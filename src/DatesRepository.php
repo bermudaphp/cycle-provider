@@ -7,7 +7,7 @@ use Bermuda\Utils\Date;
 use Bermuda\String\Str;
 use Spiral\Database\Injection\Fragment;
 use Spiral\Database\Injection\Parameter;
-use Bermuda\App\Exception\BadRequestException;
+use Bermuda\HTTP\Exception\BadRequestException;
 
 /**
  * Class DatesRepository
