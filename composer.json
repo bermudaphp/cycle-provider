@@ -8,6 +8,7 @@
     },
     "require": {
         "bermudaphp/config": "^1.0.0",
+        "bermudaphp/http": "^1.0.5",
         "php": ">= 7.4",
         "cycle/orm": "^1.2.12",
         "cycle/proxy-factory": "^1.2.1"
