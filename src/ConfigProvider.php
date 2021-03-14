@@ -2,12 +2,10 @@
 
 namespace Bermuda\Cycle;
 
-
 use Cycle\ORM\ORMInterface;
 use Cycle\ORM\PromiseFactoryInterface;
 use Cycle\ORM\SchemaInterface;
 use Spiral\Database\DatabaseManager;
-
 
 /**
  * Class CycleProvider
