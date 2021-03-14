@@ -2,7 +2,7 @@
 
 namespace Bermuda\Cycle;
 
-use App\Url;
+use Bermuda\Utils\Url;
 use Cycle\ORM\Select;
 use Cycle\ORM\ORMInterface;
 use Cycle\ORM\Transaction;
