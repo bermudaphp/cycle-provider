@@ -3,7 +3,7 @@
 namespace Bermuda\Cycle;
 
 use Cycle\ORM\Select;
-use Bermuda\Date\Date;
+use Bermuda\Utils\Date;
 use Bermuda\String\Str;
 use Spiral\Database\Injection\Fragment;
 use Spiral\Database\Injection\Parameter;
