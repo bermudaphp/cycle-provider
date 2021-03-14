@@ -154,5 +154,4 @@ class Paginator
     {
         return 'offset';
     }
-
 }
