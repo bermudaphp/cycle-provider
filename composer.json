@@ -7,7 +7,8 @@
         }
     },
     "require": {
-        "bermudaphp/config": "^1.0.0",
+        "bermudaphp/config": "^1.0",
+        "bermudaphp/utils": "^1.0",
         "bermudaphp/http": "^1.0.5",
         "php": ">= 7.4",
         "cycle/orm": "^1.2.12",
