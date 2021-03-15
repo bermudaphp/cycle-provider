@@ -1,6 +1,6 @@
 <?php
 
-namespace Bermuda\Cycle\Repository;
+namespace Bermuda\Cycle;
 
 /**
  * Interface RepositoryInterface
