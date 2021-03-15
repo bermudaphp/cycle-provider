@@ -22,6 +22,14 @@ abstract class DatesRepository extends Repository
     {
         return 'created_at';
     }
+    
+    /**
+     * @return string
+     */
+    protected function dateFormat(): string
+    {
+        return 'Y-m-d';
+    }
 
     /**
      * @param Select $select
@@ -32,12 +40,12 @@ abstract class DatesRepository extends Repository
     {
         if (($count = count($dates)) == 2)
         {
-            return $select->where(new Fragment('Date('.$this->dateCol().')'), 'between', $dates[0]->format('Y-m-d'), $dates[1]->format('Y-m-d'));
+            return $select->where(new Fragment('Date('.$this->dateCol().')'), 'between', $dates[0]->format($this->dateFormat()), $dates[1]->format($this->dateFormat()));
         }
 
         elseif ($count == 1)
         {
-            return $select->where(new Fragment('Date('.$this->dateCol().')'), $dates[0]->format('Y-m-d'));
+            return $select->where(new Fragment('Date('.$this->dateCol().')'), $dates[0]->format($this->dateFormat()));
         }
 
         elseif ($count > 2)
@@ -46,7 +54,7 @@ abstract class DatesRepository extends Repository
 
             foreach ($dates as $date)
             {
-                $params[] = $date->format('Y-m-d');
+                $params[] = $date->format($this->dateFormat());
             }
 
             return $select->where(new Fragment('Date('.$this->dateCol().')'), 'in', new Parameter($params));
