@@ -2,6 +2,8 @@
 
 namespace Bermuda\Cycle;
 
+use Bermuda\String\Str;
+
 /**
  * Class Paginator
  * @package Bermuda\Cycle
@@ -33,15 +35,38 @@ class Paginator
         {
             $this->queryParams = $queryParams;
         }
-        
+
         return $this->queryParams;
     }
 
     /**
+     * @param array|null $mergeData
      * @return array
      */
-    public function paginate():array
+    public function paginate(array $mergeData = null): array
     {
+        if ($mergeData != null)
+        {
+            $data = [
+                'count'   => $this->resultsCount,
+                'prev'    => $this->getPrevUrl(),
+                'next'    => $this->getNextUrl(),
+            ];
+
+            foreach ($mergeData as $k => $datum)
+            {
+                if (Str::equalsAny($k, 'count', 'prev', 'next'))
+                {
+                    continue;
+                }
+
+                $data[$k] = $datum;
+            }
+
+            $data['results'] = $this->results;
+            return $data;
+        }
+
         return [
             'count'   => $this->resultsCount,
             'prev'    => $this->getPrevUrl(),
