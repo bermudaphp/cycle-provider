@@ -10,15 +10,31 @@ class Paginator
 {
     private string $url;
     private array $results;
+    private array $queryParams;
     private int $limit = 10;
     private int $offset = 0;
     private int $resultsCount;
 
-    public function __construct(string $url, array $results, int $resultsCount)
+    public function __construct(string $url, array $results, int $resultsCount, array $queryParams = [])
     {
         $this->url = $url;
         $this->results = $results;
         $this->resultsCount = $resultsCount;
+        $this->queryParams = $queryParams;
+    }
+
+    /**
+     * @param array|null $queryParams
+     * @return array
+     */
+    public function queryParams(array $queryParams = null): array
+    {
+        if ($queryParams != null)
+        {
+            $this->queryParams = $queryParams;
+        }
+        
+        return $this->queryParams;
     }
 
     /**
@@ -67,7 +83,7 @@ class Paginator
      */
     public function getNextUrl():? string
     {
-        $queryParams = [];
+        $queryParams = $this->queryParams;
 
         if ($this->resultsCount > ($sum = $this->limit + $this->offset))
         {
@@ -75,7 +91,7 @@ class Paginator
 
             if ($this->limit != 10)
             {
-                $queryParams[$this->limitParam()];
+                $queryParams[$this->limitParam()] = $this->limit;
             }
 
             return $this->buildUrl($queryParams);
