@@ -168,7 +168,7 @@ abstract class Repository extends CycleRepository implements RepositoryInterface
         $paginator = new Paginator($this->getBaseUrl(),
             $this->fetchAll($select->limit($limit)
                 ->offset($offset), $queryParams),
-            $count
+            $count, $queryParams
         );
 
         $paginator->limit($limit);
