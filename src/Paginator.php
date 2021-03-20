@@ -55,7 +55,7 @@ class Paginator
 
             foreach ($mergeData as $k => $datum)
             {
-                if (Str::equalsAny($k, 'count', 'prev', 'next'))
+                if (Str::equalsAny($k, ['count', 'prev', 'next']))
                 {
                     continue;
                 }
