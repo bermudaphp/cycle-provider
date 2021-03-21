@@ -97,6 +97,11 @@ abstract class Repository extends CycleRepository implements RepositoryInterface
                 if (is_array($value))
                 {
                     $value = $this->fetchRelation($name, $value);
+                    
+                    if ($value == [])
+                    {
+                        continue;
+                    }
                 }
 
                 $result[$name] = $value;
