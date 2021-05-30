@@ -9,7 +9,7 @@
     "require": {
         "bermudaphp/config": "^1.0",
         "bermudaphp/utils": "^1.0",
-        "bermudaphp/http": "^1.0.5",
+        "bermudaphp/http": "^1.0",
         "php": "^7.4 || ~8.0.0",
         "cycle/orm": "^1.2.12",
         "cycle/proxy-factory": "^1.2.1"
