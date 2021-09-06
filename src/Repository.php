@@ -2,14 +2,18 @@
 
 namespace Bermuda\Cycle;
 
+use App\Entity\Post;
+use Bermuda\Arrayable;
 use Bermuda\Utils\Url;
 use Cycle\ORM\Select;
 use Cycle\ORM\ORMInterface;
 use Cycle\ORM\Transaction;
 use Cycle\ORM\TransactionInterface;
+use Psr\Container\ContainerInterface;
 use Spiral\Database\DatabaseInterface;
 use \Cycle\ORM\Select\Repository as CycleRepository;
-use function Bermuda\urlFor;
+use Spiral\Database\Injection\Parameter;
+use function Bermuda\route;
 
 /**
  * Class Repository
@@ -67,7 +71,7 @@ abstract class Repository extends CycleRepository implements RepositoryInterface
     /**
      * @return string
      */
-    abstract protected function getRole(): string ;
+    abstract protected static function getRole(): string ;
 
     /**
      * @return Transaction
@@ -92,16 +96,31 @@ abstract class Repository extends CycleRepository implements RepositoryInterface
 
         foreach ($datum as $name => $value)
         {
+            if (in_array($name, $this->getExceptedFields()))
+            {
+                continue;
+            }
+
             if (!is_null($value))
             {
                 if (is_array($value))
                 {
                     $value = $this->fetchRelation($name, $value);
-                    
+
                     if ($value == [])
                     {
                         continue;
                     }
+                }
+
+                elseif ($value instanceof Arrayable)
+                {
+                    $value = $value->toArray();
+                }
+
+                elseif ($value instanceof \Stringable)
+                {
+                    $value = $value->__toString();
                 }
 
                 $result[$name] = $value;
@@ -109,6 +128,11 @@ abstract class Repository extends CycleRepository implements RepositoryInterface
         }
 
         return $result;
+    }
+
+    protected function getExceptedFields(): array
+    {
+        return [];
     }
 
     /**
@@ -148,12 +172,83 @@ abstract class Repository extends CycleRepository implements RepositoryInterface
      * @param array $queryParams
      * @return array[]
      */
-    public function get(array $queryParams = []):array
+    public function get(array $queryParams = []): array
     {
         $select = $this->buildSelectQuery($queryParams);
         $paginator = $this->getPaginator($select, $queryParams);
 
         return $paginator->paginate();
+    }
+
+    /**
+     * @param $id
+     * @return object
+     * @throws \RuntimeException
+     */
+    public function findById($id): object
+    {
+        $object = $this->findByPK($id);
+
+        if ($object == null)
+        {
+            throw new \RuntimeException(
+                sprintf('Entity: %s with id: %s not found!', $this->getRole(), $id), 404
+            );
+        }
+
+        return $object;
+    }
+
+    public function destroy($objectOrId, bool $cascade = true): void
+    {
+        if (is_string($objectOrId))
+        {
+            $objectOrId = [$objectOrId];
+        }
+
+        elseif (is_array($objectOrId))
+        {
+            $objectOrId = $this->select()->where($this->loader->getPK(), 'in', new Parameter($objectOrId))
+                ->fetchAll();
+
+            foreach ($objectOrId as $obj)
+            {
+                $this->getTransaction()->delete($objectOrId, $cascade
+                    ? Transaction::MODE_CASCADE
+                    : Transaction::MODE_ENTITY_ONLY
+                );
+            }
+
+            $this->getTransaction()->run();
+        }
+
+        elseif ($role = $this->getRole() && $objectOrId instanceof $role)
+        {
+            $this->getTransaction()->delete($objectOrId, $cascade
+                ? Transaction::MODE_CASCADE
+                : Transaction::MODE_ENTITY_ONLY
+            )->run();
+        }
+
+        else
+        {
+            throw new \InvalidArgumentException();
+        }
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function store(object $object, bool $cascade = true): object
+    {
+        $this->getTransaction()->persist($object,
+            $cascade ? Transaction::MODE_CASCADE
+                : Transaction::MODE_ENTITY_ONLY
+        );
+
+        $this->getTransaction()->run();
+
+        return $object;
     }
 
     /**
@@ -247,6 +342,15 @@ abstract class Repository extends CycleRepository implements RepositoryInterface
             throw new \RuntimeException('Overwrite self::$routeName');
         }
 
-        return Url::build(['path' => urlFor($this->routeName)]);
+        return route($this->routeName, asUrl: true);
+    }
+
+    /**
+     * @param ContainerInterface $container
+     * @return static
+     */
+    public static function newSelf(ContainerInterface $container): self
+    {
+        return $container->get(ORMInterface::class)->getRepository(static::getRole());
     }
 }
