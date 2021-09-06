@@ -2,7 +2,6 @@
 
 namespace Bermuda\Cycle;
 
-use App\Entity\Post;
 use Bermuda\Arrayable;
 use Bermuda\Utils\Url;
 use Cycle\ORM\Select;
@@ -11,14 +10,10 @@ use Cycle\ORM\Transaction;
 use Cycle\ORM\TransactionInterface;
 use Psr\Container\ContainerInterface;
 use Spiral\Database\DatabaseInterface;
-use \Cycle\ORM\Select\Repository as CycleRepository;
+use Cycle\ORM\Select\Repository as CycleRepository;
 use Spiral\Database\Injection\Parameter;
 use function Bermuda\route;
 
-/**
- * Class Repository
- * @package Bermuda\Cycle
- */
 abstract class Repository extends CycleRepository implements RepositoryInterface
 {
     protected ORMInterface $orm;
