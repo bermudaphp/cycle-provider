@@ -9,6 +9,13 @@ namespace Bermuda\Cycle;
 interface RepositoryInterface
 {
     /**
+     * @param $id
+     * @return object
+     * @throws EntityNotFound
+     */
+    public function findById($id): object ;
+
+    /**
      * @param array $identity
      * @return bool
      */
