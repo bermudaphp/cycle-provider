@@ -71,7 +71,10 @@ abstract class Repository extends CycleRepository implements RepositoryInterface
     /**
      * @return string
      */
-    abstract protected static function getRole(): string ;
+    protected static function getRole(): string
+    {
+        throw new \RuntimeException('Ovewrite current methood');
+    }
 
     /**
      * @return Transaction
@@ -183,7 +186,7 @@ abstract class Repository extends CycleRepository implements RepositoryInterface
     /**
      * @param $id
      * @return object
-     * @throws \RuntimeException
+     * @throws Exceptions\EntityNotFound
      */
     public function findById($id): object
     {
@@ -191,9 +194,7 @@ abstract class Repository extends CycleRepository implements RepositoryInterface
 
         if ($object == null)
         {
-            throw new \RuntimeException(
-                sprintf('Entity: %s with id: %s not found!', $this->getRole(), $id), 404
-            );
+            throw new Exceptions\EntityNotFound(static::getRole(), $id);
         }
 
         return $object;
