@@ -1,42 +1,58 @@
 <?php
 
-namespace Bermuda\Cycle;
+namespace App;
 
-use Bermuda\String\Str;
+use Bermuda\Utils\URL;
 
-/**
- * Class Paginator
- * @package Bermuda\Cycle
- */
 class Paginator
 {
-    private string $url;
-    private array $results;
-    private array $queryParams;
-    private int $limit = 10;
-    private int $offset = 0;
-    private int $resultsCount;
+    private ?string $url = null;
 
-    public function __construct(string $url, array $results, int $resultsCount, array $queryParams = [])
-    {
-        $this->url = $url;
-        $this->results = $results;
-        $this->resultsCount = $resultsCount;
-        $this->queryParams = $queryParams;
+    public function __construct(
+        private array $results,
+        private int $resultsCount,
+        private array $queryParams = []
+    ){
     }
 
     /**
-     * @param array|null $queryParams
-     * @return array
+     * @param string $url
+     * @return $this
      */
-    public function queryParams(array $queryParams = null): array
+    public function setUrl(string $url): self
     {
-        if ($queryParams != null)
-        {
-            $this->queryParams = $queryParams;
-        }
+        $this->url = trim($url, '/?');
+        return $this;
+    }
 
-        return $this->queryParams;
+    /**
+     * @param array $results
+     * @return $this
+     */
+    public function setResults(array $results): self
+    {
+        $this->results = $results;
+        return $this;
+    }
+
+    /**
+     * @param array $queryParams
+     * @return $this
+     */
+    public function setQueryParams(array $queryParams): self
+    {
+        $this->queryParams = $queryParams;
+        return $this;
+    }
+
+    /**
+     * @param int $resultsCount
+     * @return $this
+     */
+    public function setResultsCount(int $resultsCount): self
+    {
+        $this->resultsCount = $resultsCount;
+        return $this;
     }
 
     /**
@@ -45,62 +61,19 @@ class Paginator
      */
     public function paginate(array $mergeData = null): array
     {
-        if ($mergeData != null)
-        {
-            $data = [
-                'count'   => $this->resultsCount,
-                'prev'    => $this->getPrevUrl(),
-                'next'    => $this->getNextUrl(),
-            ];
-
-            foreach ($mergeData as $k => $datum)
-            {
-                if (Str::equalsAny($k, ['count', 'prev', 'next']))
-                {
-                    continue;
-                }
-
-                $data[$k] = $datum;
-            }
-
-            $data['results'] = $this->results;
-            return $data;
-        }
-
-        return [
+        $data = [
             'count'   => $this->resultsCount,
             'prev'    => $this->getPrevUrl(),
             'next'    => $this->getNextUrl(),
-            'results' => $this->results,
+            'range'   => $this->getRange(),
+            'results' => $this->results
         ];
-    }
 
-    /**
-     * @param int|null $limit
-     * @return int
-     */
-    public function limit(?int $limit = null): int
-    {
-        if ($limit != null)
-        {
-            $this->limit = $limit;
+        if ($mergeData != null) {
+            return array_merge($mergeData, $data);
         }
 
-        return $this->limit;
-    }
-
-    /**
-     * @param int|null $offset
-     * @return int
-     */
-    public function offset(?int $offset = null): int
-    {
-        if ($offset != null)
-        {
-            $this->offset = $offset;
-        }
-
-        return $this->offset;
+        return $data;
     }
 
     /**
@@ -109,20 +82,34 @@ class Paginator
     public function getNextUrl():? string
     {
         $queryParams = $this->queryParams;
+        list($limit, $offset) = $this->parseQueryParams($queryParams);
 
-        if ($this->resultsCount > ($sum = $this->limit + $this->offset))
-        {
-            $queryParams[$this->offsetParam()] = $sum;
-
-            if ($this->limit != 10)
-            {
-                $queryParams[$this->limitParam()] = $this->limit;
-            }
-
+        if ($this->resultsCount > ($offset = $limit + $offset)) {
+            $queryParams['offset'] = $offset;
             return $this->buildUrl($queryParams);
         }
 
         return null;
+    }
+
+    public function getRange(): string
+    {
+        list(, $offset) = $this->parseQueryParams();
+
+        if ($offset == 0) {
+            return '1-'. count($this->results);
+        }
+
+        return $offset + 1 .'-'. $offset + count($this->results);
+    }
+
+    private function parseQueryParams(array $queryParams = null): array
+    {
+        if ($queryParams === null){
+            $queryParams = $this->queryParams;
+        }
+
+        return [$queryParams['limit'] ?? 10, $queryParams['offset'] ?? 0];
     }
 
     /**
@@ -130,45 +117,21 @@ class Paginator
      */
     public function getPrevUrl():? string
     {
-        $queryParams = [];
+        $queryParams = $this->queryParams;
 
-        if ($this->offset != 0)
-        {
-            if (($diff = $this->offset - $this->limit) >= 0)
-            {
-                if ($diff > 0)
-                {
-                    $queryParams[$this->offsetParam()] = $diff;
-                }
+        list($limit, $offset) = $this->parseQueryParams($queryParams);
 
-                if ($this->limit != 10)
-                {
-                    $queryParams[$this->limitParam()] = $this->limit;
-                }
-
-                return $this->buildUrl($queryParams);
+        if ($offset != 0) {
+            if (($diff = $offset - $limit) > 0) {
+                $queryParams['offset'] = $diff;
+            } elseif ($diff == 0){
+                unset($queryParams['offset']);
             }
 
             return $this->buildUrl($queryParams);
         }
 
         return null;
-    }
-
-    /**
-     * @return int
-     */
-    public function getResultsCount(): int
-    {
-        return $this->resultsCount;
-    }
-
-    /**
-     * @return string
-     */
-    public function getUrl(): string
-    {
-        return $this->url;
     }
 
     /**
@@ -177,22 +140,10 @@ class Paginator
      */
     private function buildUrl(array $queryParams): string
     {
+        if ($this->url === null) {
+            return URL::build(['params' => $queryParams]);
+        }
+
         return $this->url . ($queryParams != [] ? '?' . http_build_query($queryParams) : '');
-    }
-
-    /**
-     * @return string
-     */
-    protected function limitParam(): string
-    {
-        return 'limit';
-    }
-
-    /**
-     * @return string
-     */
-    protected function offsetParam(): string
-    {
-        return 'offset';
     }
 }
