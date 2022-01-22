@@ -7,11 +7,10 @@
         }
     },
     "require": {
-        "bermudaphp/config": "^1.0",
-        "bermudaphp/utils": "^1.0",
-        "bermudaphp/http": "^1.0",
-        "php": "^7.4 || ~8.0.0",
-        "cycle/orm": "^1.2.12",
-        "cycle/proxy-factory": "^1.2.1"
+        "bermudaphp/config": "^1.1.1",
+        "bermudaphp/utils": "^1.2.4",
+        "bermudaphp/http": "^1.0.1",
+        "php": "^8.0|^8.1",
+        "cycle/orm": "^2.0.1",
     }
 }
