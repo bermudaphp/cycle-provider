@@ -67,13 +67,10 @@ trait Dates
             $select = $this->dates($select, $dates);
         }
 
-        if (isset($queryParams['order'])) {
-            $order = strtoupper($queryParams['order']);
-            if ($order != 'ASC' && $order != 'DESC') {
-                unset($order);
-            }
-        }
+        $order = isset($queryParams['order']) 
+            && strtoupper($queryParams['order']) == 'DESC' 
+            ? 'DESC' : 'ASC';
 
-        return $select->orderBy($this->dateTimeColumn, $order ?? 'ASC');
+        return $select->orderBy($this->dateTimeColumn, $order);
     }
 }
