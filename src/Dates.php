@@ -30,7 +30,7 @@ trait Dates
             foreach ($dates as $date) {
                 $params[] = $date->format($this->dateTimeFormat);
             }
-
+            
             return $select->where(new Fragment('Date('.$this->dateTimeColumn.')'), 'in', new Parameter($params ?? []));
         }
 
@@ -79,7 +79,6 @@ trait Dates
 
         if (isset($queryParams['order'])) {
             $order = strtoupper($queryParams['order']);
-
             if ($order != 'ASC' && $order != 'DESC') {
                 unset($order);
             }
