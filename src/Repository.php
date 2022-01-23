@@ -307,11 +307,15 @@ abstract class Repository extends CycleRepository implements RepositoryInterface
     {
         $select = $this->select();
 
-        if (isset($queryParams['load']))
-        {
-            foreach ($this->parse($queryParams['load']) as $r)
-            {
+        if (isset($queryParams['load'])) {
+            foreach ($this->parse($queryParams['load']) as $r) {
                 $select->load($r);
+            }
+        }
+        
+        if (static::$hooks !== []) {
+            foreach($this->hooks as $hook) {
+                $select = $hook($select, $queryParams);
             }
         }
 
