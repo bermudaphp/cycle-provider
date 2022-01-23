@@ -23,9 +23,8 @@ final class DatabaseManagerFactory
     {
         $config = $container->get('config');
 
-        if (!isset($config['cycle']))
-        {
-            throw new ConfigException('Expected config databases');
+        if (!isset($config['cycle'])) {
+            throw new ConfigException('Database configuration expected');
         }
 
         return new DatabaseManager(new DatabaseConfig($config['cycle'][0]));
