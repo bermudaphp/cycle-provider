@@ -18,7 +18,7 @@ final class ORMFactory
      * @param ContainerInterface $container
      * @return ORM
      */
-    public function __invoke(ContainerInterface $container): ORMInterface
+    public function __invoke(ContainerInterface $container): ORM
     {
         return (new ORM(new Factory($container->get(DatabaseManager::class),
                 RelationConfig::getDefault(), cget($container, FactoryInterface::class),
