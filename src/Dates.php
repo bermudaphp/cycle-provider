@@ -36,7 +36,7 @@ trait Dates
 
         return $select;
     }
-
+    
     /**
      * @param string $dates
      * @return \DateTimeInterface[]
