@@ -2,7 +2,7 @@
 
 namespace Bermuda\Cycle;
 
-use Bermuda\Config\ConfigProvider;
+use Bermuda\Config\ConfigProvider as AbstractProvider;
 use Cycle\Database\Config\DatabaseConfig;
 use Cycle\Database\DatabaseManager;
 use Cycle\Database\DatabaseProviderInterface;
@@ -25,7 +25,7 @@ use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 
-class CycleProvider extends ConfigProvider
+class ConfigProvider extends AbstractProvider
 {
     protected function getFactories(): array
     {
