@@ -2,10 +2,10 @@
 
 namespace Bermuda\Cycle;
 
-use Cycle\ORM\EntityManager;
-use Cycle\ORM\EntityManagerInterface;
 use Cycle\ORM\Select;
 use Cycle\ORM\ORMInterface;
+use Cycle\ORM\EntityManager;
+use Cycle\ORM\EntityManagerInterface;
 
 trait Persistent
 {
