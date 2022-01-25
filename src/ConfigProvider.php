@@ -32,7 +32,9 @@ class CycleProvider extends ConfigProvider
         return [
             ORMInterface::class => static function (ContainerInterface $container): ORM {
                 return new ORM($container->get(FactoryInterface::class), $container->get(SchemaInterface::class),
-                    $container->get(CommandGeneratorInterface::class, $container->get(HeapInterface::class))
+                    $container->has(CommandGeneratorInterface::class) ?
+                        $container->get(CommandGeneratorInterface::class) : null,
+                    $container->get(HeapInterface::class)
                 );
             },
             DatabaseProviderInterface::class => static function (ContainerInterface $container): DatabaseManager {
