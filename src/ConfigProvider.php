@@ -10,6 +10,7 @@ use Cycle\Database\Driver\DriverInterface;
 use Cycle\Database\LoggerFactoryInterface;
 use Cycle\ORM\Collection\ArrayCollectionFactory;
 use Cycle\ORM\Collection\CollectionFactoryInterface;
+use Cycle\ORM\Collection\DoctrineCollectionFactory;
 use Cycle\ORM\EntityManager;
 use Cycle\ORM\EntityManagerInterface;
 use Cycle\ORM\Factory;
@@ -61,8 +62,8 @@ class ConfigProvider extends AbstractProvider
                     defaultCollectionFactory: $container->get(CollectionFactoryInterface::class)
                 );
             },
-            CollectionFactoryInterface::class => static function (): ArrayCollectionFactory {
-                return new ArrayCollectionFactory;
+            CollectionFactoryInterface::class => static function (): DoctrineCollectionFactory {
+                return new DoctrineCollectionFactory();
             },
             SchemaInterface::class => static function (ContainerInterface $container): Schema {
                 $config = $container->get('config');
