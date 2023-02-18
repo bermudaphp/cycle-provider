@@ -1,6 +1,6 @@
 <?php
 
-namespace Bermuda\Cycle\Repository;
+namespace Bermuda\Cycle;
 
 use Bermuda\Paginator\QueryException;
 use Bermuda\Paginator\Paginator;
