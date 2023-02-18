@@ -9,6 +9,7 @@
     "require": {
         "php": "^8.0|^8.1",
         "bermudaphp/config": "^1.1.1",
+        "bermudaphp/http-exception": "^1.0",
         "cycle/orm": "^2.1",
         "doctrine/collections": "^1.6.8"
     }
