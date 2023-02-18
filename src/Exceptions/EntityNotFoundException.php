@@ -4,7 +4,7 @@ namespace Bermuda\Cycle\Exceptions;
 
 use Bermuda\HTTP\HttpException;
 
-class EntityNotFound extends HttpException 
+class EntityNotFoundException extends HttpException 
 {
     public function __construct(private string $role, private string $id)
     {
