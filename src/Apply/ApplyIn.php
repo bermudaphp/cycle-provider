@@ -1,6 +1,6 @@
 <?php
 
-namespace Bermuda\Cycle\Appy;
+namespace Bermuda\Cycle\Apply;
 
 use Cycle\Database\Injection\Parameter;
 use Cycle\ORM\SchemaInterface;
