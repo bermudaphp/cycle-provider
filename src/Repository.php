@@ -2,8 +2,7 @@
 
 namespace Bermuda\Cycle\Repository;
 
-use App\Query\QueryException;
-use App\Query\Selectable;
+use Bermuda\Paginator\QueryException;
 use Bermuda\Paginator\Paginator;
 use Bermuda\Paginator\QueryInterface;
 use Cycle\ORM\EntityManager;
