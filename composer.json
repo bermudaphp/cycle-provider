@@ -11,7 +11,7 @@
         "bermudaphp/config": "^1.1.1",
         "bermudaphp/http-exception": "^1.0",
         "bermudaphp/paginator": "^1.0",
-        "cycle/orm": "^2.1",
+        "cycle/orm": "^2.2.2",
         "doctrine/collections": "^1.6.8"
     }
 }
