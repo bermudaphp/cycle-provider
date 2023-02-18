@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Query\Applies;
+namespace Bermuda\Cycle\Apply;
 
 use Cycle\Database\Injection\Fragment;
 use Cycle\Database\Injection\Parameter;
