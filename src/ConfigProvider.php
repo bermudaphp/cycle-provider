@@ -28,6 +28,7 @@ use Psr\Log\NullLogger;
 
 class ConfigProvider extends AbstractProvider
 {
+    public const configKey = 'cycle';
     protected function getFactories(): array
     {
         return [
@@ -51,10 +52,10 @@ class ConfigProvider extends AbstractProvider
             },
             DatabaseConfig::class => static function (ContainerInterface $container): DatabaseConfig {
                 $config = $container->get('config');
-                if (!isset($config['cycle'])) {
+                if (!isset($config[self::configKey])) {
                     throw new \RuntimeException('Database configuration expected');
                 }
-                return new DatabaseConfig($config['cycle'][0]);
+                return new DatabaseConfig($config[self::configKey][0]);
             },
             HeapInterface::class => static fn(): Heap => new Heap,
             FactoryInterface::class => static function (ContainerInterface $container): Factory {
@@ -67,10 +68,10 @@ class ConfigProvider extends AbstractProvider
             },
             SchemaInterface::class => static function (ContainerInterface $container): Schema {
                 $config = $container->get('config');
-                if (!isset($config['cycle'])) {
+                if (!isset($config[self::configKey])) {
                     throw new \RuntimeException('Database configuration expected');
                 }
-                return new Schema($config['cycle'][1]);
+                return new Schema($config[self::configKey][1]);
             },
             EntityManagerInterface::class => static function (ContainerInterface $container): EntityManager {
                 return new EntityManager($container->get(ORMInterface::class));
