@@ -1,6 +1,6 @@
 <?php
 
-namespace Bermuda\Cycle\Appy;
+namespace Bermuda\Cycle\Apply;
 
 use Cycle\ORM\SchemaInterface;
 use Cycle\ORM\Select;
