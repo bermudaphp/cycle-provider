@@ -63,10 +63,9 @@ abstract class Repository extends Select\Repository
         if ($query == []) return $this->select();
 
         $select = $this->select();
-        if ($query instanceof Selectable) {
-            return $query->apply($select, $this->orm->getSchema());
-        }
-
+        if ($query instanceof OrmAwareInterface) $query->setOrm($this->orm);
+        if ($query instanceof Selectable) return $query->apply($select, $this->orm->getSchema());
+        
         return $this->getQueryInstance($query)->apply($select, $this->orm->getSchema());
     }
 
