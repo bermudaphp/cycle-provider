@@ -7,7 +7,7 @@ use Cycle\ORM\Select;
 
 final class ApplyLoad
 {
-    public function __invoke(Select $select, SchemaInterface $schema, array $relations): Select
+    public function __invoke(Select $select, array $relations): Select
     {
         return $select->load($relations);
     }

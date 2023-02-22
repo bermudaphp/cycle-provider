@@ -14,7 +14,7 @@ final class ApplyDateTime
     ) {
     }
 
-    public function __invoke(Select $select, SchemaInterface $schema, \DateTimeInterface $date): Select
+    public function __invoke(Select $select, \DateTimeInterface $date): Select
     {
         return $select->where(new Fragment("Date($this->column)"), $date->format($this->dateTimeFormat));
     }

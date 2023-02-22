@@ -20,7 +20,7 @@ final class ApplyDateTimeBetween
      * @param \DateTimeInterface[] $dates
      * @return Select
      */
-    public function __invoke(Select $select, SchemaInterface $schema, array $dates): Select
+    public function __invoke(Select $select, array $dates): Select
     {
         return $select->where(
             new Fragment("Date($this->column)"),

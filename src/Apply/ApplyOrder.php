@@ -20,7 +20,7 @@ final class ApplyOrder
             ? self::asc : self::desc;
     }
 
-    public function __invoke(Select $select, SchemaInterface $schema, int $offset): Select
+    public function __invoke(Select $select, int $offset): Select
     {
         return $select->orderBy($this->column, $this->mode);
     }

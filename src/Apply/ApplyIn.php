@@ -19,7 +19,7 @@ final class ApplyIn
      * @param array $values
      * @return Select
      */
-    public function __invoke(Select $select, SchemaInterface $schema, array $values): Select
+    public function __invoke(Select $select, array $values): Select
     {
         return $select->where($this->column, 'in', new Parameter($values));
     }

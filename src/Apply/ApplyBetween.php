@@ -18,7 +18,7 @@ final class ApplyBetween
      * @param array $value
      * @return Select
      */
-    public function __invoke(Select $select, SchemaInterface $schema, array $value): Select
+    public function __invoke(Select $select, array $value): Select
     {
         return $select->where($this->column, 'between', $value[0], $value[1]);
     }
