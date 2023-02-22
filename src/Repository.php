@@ -68,5 +68,5 @@ abstract class Repository extends Select\Repository
         return $this->getQueryInstance($query)->apply($this->select(), $this->orm->getSchema());
     }
 
-    abstract protected function getQueryInstance(QueryInterface $query): Selectable ;
+    abstract protected function getQueryInstance(array|QueryInterface $query): Selectable ;
 }
