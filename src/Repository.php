@@ -51,7 +51,7 @@ abstract class Repository extends Select\Repository
         $results = [];
         foreach ($select as $entity) $results[] = $entity->toArray();
 
-        return new Paginator($results, $resultsCount ?? 100, $query);
+        return new Paginator($results, $resultsCount ?? 100, query: $query);
     }
 
 
