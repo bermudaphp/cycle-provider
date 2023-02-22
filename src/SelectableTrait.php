@@ -10,9 +10,9 @@ trait SelectableTrait
     public function apply(Select $select, SchemaInterface $schema): Select
     {
         $callbacks = $this->getApplyCallbacks();
-        foreach ($this->queryParams as $name => $value) {
+        foreach ($this->data as $name => $value) {
             if (isset($callbacks[$name])) $select = $callbacks[$name]($select, $schema, $value);
-            else $select = $select->where($name, $this->queryParams[$name]);
+            else $select = $select->where($name, $this->data[$name]);
         }
 
         return $this->finalize($select);
