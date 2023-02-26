@@ -15,10 +15,10 @@ final class ApplyOrder implements Selectable
 
     /**
      * @param SelectQuery $query
-     * @param mixed|null $vaule
+     * @param mixed|null $value
      * @return SelectQuery
      */
-    public function apply(SelectQuery $query, mixed $vaule = null): SelectQuery
+    public function apply(SelectQuery $query, mixed $value = null): SelectQuery
     {
         return $query->orderBy($this->column, strtoupper($this->mode->name));
     }
