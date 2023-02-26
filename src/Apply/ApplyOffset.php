@@ -12,7 +12,7 @@ final class ApplyOffset implements Selectable
      * @param int $offset
      * @return SelectQuery
      */
-    public function __invoke(SelectQuery $query, mixed $offset): SelectQuery
+    public function apply(SelectQuery $query, mixed $offset): SelectQuery
     {
         return $query->offset($offset);
     }
