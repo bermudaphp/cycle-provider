@@ -2,24 +2,17 @@
 
 namespace Bermuda\Cycle\Apply;
 
-use Cycle\ORM\SchemaInterface;
-use Cycle\ORM\Select;
+use Cycle\Database\Query\SelectQuery;
 
-final class ApplyBetween
+final class ApplyBetween implements Selectable
 {
     public function __construct(
         public readonly string $column,
     ) {
     }
-
-    /**
-     * @param Select $select
-     * @param SchemaInterface $schema
-     * @param array $value
-     * @return Select
-     */
-    public function __invoke(Select $select, array $value): Select
+    
+    public function apply(SelectQuery $query, mixed $value): Select
     {
-        return $select->where($this->column, 'between', $value[0], $value[1]);
+        return $query->where($this->column, 'between', $value[0], $value[1]);
     }
 }
