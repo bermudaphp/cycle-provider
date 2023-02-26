@@ -2,12 +2,12 @@
 
 namespace Bermuda\Cycle\Apply;
 
+use Bermuda\Cycle\Selectable;
 use Cycle\Database\Injection\Fragment;
 use Cycle\Database\Injection\Parameter;
-use Cycle\ORM\SchemaInterface;
-use Cycle\ORM\Select;
+use Cycle\Database\Query\SelectQuery;
 
-final class ApplyDateTimeIn
+final class ApplyDateTimeIn implements Selectable
 {
     public function __construct(
         public readonly string $column,
@@ -16,14 +16,14 @@ final class ApplyDateTimeIn
     }
 
     /**
-     * @param Select $select
+     * @param SelectQuery $query
      * @param SchemaInterface $schema
      * @param \DateTimeInterface[] $dates
-     * @return Select
+     * @return SelectQuery
      */
-    public function __invoke(Select $select, array $dates): Select
+    public function apply(SelectQuery $query, mixed $dates): SelectQuery
     {
-        return $select->where(
+        return $query->where(
             new Fragment("Date($this->column)"), 'in',
             new Parameter(array_map(fn(\DateTimeInterface $date) => $date->format($this->dateTimeFormat), $dates))
         );

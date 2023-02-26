@@ -2,11 +2,11 @@
 
 namespace Bermuda\Cycle\Apply;
 
+use Bermuda\Cycle\Selectable;
 use Cycle\Database\Injection\Fragment;
-use Cycle\ORM\SchemaInterface;
-use Cycle\ORM\Select;
+use Cycle\Database\Query\SelectQuery;
 
-final class ApplyDateTimeBetween
+final class ApplyDateTimeBetween implements Selectable
 {
     public function __construct(
         public readonly string $column,
@@ -15,14 +15,13 @@ final class ApplyDateTimeBetween
     }
 
     /**
-     * @param Select $select
-     * @param SchemaInterface $schema
+     * @param SelectQuery $query
      * @param \DateTimeInterface[] $dates
-     * @return Select
+     * @return SelectQuery
      */
-    public function __invoke(Select $select, array $dates): Select
+    public function apply(SelectQuery $query, mixed $dates): SelectQuery
     {
-        return $select->where(
+        return $query->where(
             new Fragment("Date($this->column)"),
             'between', $dates[0]->format($this->dateTimeFormat),
             $dates[1]->format($this->dateTimeFormat),

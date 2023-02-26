@@ -10,8 +10,13 @@ final class ApplyBetween implements Selectable
         public readonly string $column,
     ) {
     }
-    
-    public function apply(SelectQuery $query, mixed $value): Select
+
+    /**
+     * @param SelectQuery $query
+     * @param array $value
+     * @return SelectQuery
+     */
+    public function apply(SelectQuery $query, mixed $value): SelectQuery
     {
         return $query->where($this->column, 'between', $value[0], $value[1]);
     }

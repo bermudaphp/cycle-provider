@@ -2,26 +2,24 @@
 
 namespace Bermuda\Cycle\Apply;
 
-use Cycle\ORM\SchemaInterface;
-use Cycle\ORM\Select;
+use Bermuda\Cycle\Selectable;
+use Cycle\Database\Query\SelectQuery;
 
-final class ApplyOrder
+final class ApplyOrder implements Selectable
 {
-    public const asc = 'asc';
-    public const desc = 'desc';
-
-    public readonly string $mode;
-
     public function __construct(
         public readonly string $column,
-        string $mode = self::asc
+        public readonly OrderMode $mode = OrderMode::Asc
     ) {
-        $this->mode = strtolower($mode) === self::asc
-            ? self::asc : self::desc;
     }
 
-    public function __invoke(Select $select, int $offset): Select
+    /**
+     * @param SelectQuery $query
+     * @param mixed|null $vaule
+     * @return SelectQuery
+     */
+    public function apply(SelectQuery $query, mixed $vaule = null): SelectQuery
     {
-        return $select->orderBy($this->column, $this->mode);
+        return $query->orderBy($this->column, strtoupper($this->mode->name));
     }
 }

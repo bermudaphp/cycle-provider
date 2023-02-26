@@ -2,11 +2,11 @@
 
 namespace Bermuda\Cycle\Apply;
 
+use Bermuda\Cycle\Selectable;
 use Cycle\Database\Injection\Parameter;
-use Cycle\ORM\SchemaInterface;
-use Cycle\ORM\Select;
+use Cycle\Database\Query\SelectQuery;
 
-final class ApplyIn
+final class ApplyIn implements Selectable
 {
     public function __construct(
         public readonly string $column
@@ -14,12 +14,11 @@ final class ApplyIn
     }
 
     /**
-     * @param Select $select
-     * @param SchemaInterface $schema
+     * @param SelectQuery $select
      * @param array $values
-     * @return Select
+     * @return SelectQuery
      */
-    public function __invoke(Select $select, array $values): Select
+    public function __invoke(SelectQuery $select, mixed $values): SelectQuery
     {
         return $select->where($this->column, 'in', new Parameter($values));
     }

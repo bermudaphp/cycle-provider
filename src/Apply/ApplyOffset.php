@@ -2,13 +2,18 @@
 
 namespace Bermuda\Cycle\Apply;
 
-use Cycle\ORM\SchemaInterface;
-use Cycle\ORM\Select;
+use Bermuda\Cycle\Selectable;
+use Cycle\Database\Query\SelectQuery;
 
-final class ApplyOffset
+final class ApplyOffset implements Selectable
 {
-    public function __invoke(Select $select, int $offset): Select
+    /**
+     * @param SelectQuery $query
+     * @param int $offset
+     * @return SelectQuery
+     */
+    public function __invoke(SelectQuery $query, mixed $offset): SelectQuery
     {
-        return $select->offset($offset);
+        return $query->offset($offset);
     }
 }

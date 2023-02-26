@@ -2,13 +2,18 @@
 
 namespace Bermuda\Cycle\Apply;
 
-use Cycle\ORM\SchemaInterface;
-use Cycle\ORM\Select;
+use Bermuda\Cycle\Selectable;
+use Cycle\Database\Query\SelectQuery;
 
-final class ApplyLoad
+final class ApplyLoad implements Selectable
 {
-    public function __invoke(Select $select, array $relations): Select
+    /**
+     * @param SelectQuery $query
+     * @param array $relations
+     * @return SelectQuery
+     */
+    public function apply(SelectQuery $query, mixed $relations): SelectQuery
     {
-        return $select->load($relations);
+        return $query->load($relations);
     }
 }

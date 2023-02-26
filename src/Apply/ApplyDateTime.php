@@ -2,11 +2,11 @@
 
 namespace Bermuda\Cycle\Apply;
 
+use Bermuda\Cycle\Selectable;
 use Cycle\Database\Injection\Fragment;
-use Cycle\ORM\SchemaInterface;
-use Cycle\ORM\Select;
+use Cycle\Database\Query\SelectQuery;
 
-final class ApplyDateTime
+final class ApplyDateTime implements Selectable
 {
     public function __construct(
         public readonly string $column,
@@ -14,8 +14,13 @@ final class ApplyDateTime
     ) {
     }
 
-    public function __invoke(Select $select, \DateTimeInterface $date): Select
+    /**
+     * @param SelectQuery $query
+     * @param \DateTimeInterface $date
+     * @return SelectQuery
+     */
+    public function apply(SelectQuery $query, mixed $date): SelectQuery
     {
-        return $select->where(new Fragment("Date($this->column)"), $date->format($this->dateTimeFormat));
+        return $query->where(new Fragment("Date($this->column)"), $date->format($this->dateTimeFormat));
     }
 }
