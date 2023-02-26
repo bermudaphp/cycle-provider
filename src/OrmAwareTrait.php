@@ -6,7 +6,7 @@ use Cycle\ORM\ORMInterface;
 
 trait OrmAwareTrait
 {
-    private ?ORMInterface $orm = null;
+    protected ?ORMInterface $orm = null;
     
     public function setOrm(ORMInterface $orm): OrmAwareInterface
     {
