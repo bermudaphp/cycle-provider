@@ -2,16 +2,9 @@
 
 namespace Bermuda\Cycle;
 
-use Cycle\ORM\SchemaInterface;
-use Cycle\ORM\Select;
+use Cycle\Database\Query\SelectQuery;
 
 interface Selectable
 {
-    /**
-     * @param Select $select
-     * @param SchemaInterface $schema
-     * @return Select
-     * @throws QueryException
-     */
-    public function apply(Select $select, SchemaInterface $schema): Select ;
+    public function apply(SelectQuery $query, mixed $value): SelectQuery ;
 }
