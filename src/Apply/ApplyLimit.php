@@ -2,13 +2,12 @@
 
 namespace Bermuda\Cycle\Apply;
 
-use Cycle\ORM\SchemaInterface;
-use Cycle\ORM\Select;
+use Cycle\Database\Query\SelectQuery;
 
-final class ApplyLimit
+final class ApplyLimit implements Selectable
 {
-    public function __invoke(Select $select, int $limit): Select
+    public function apply(SelectQuery $query, mixed $limit): SelectQuery
     {
-        return $select->limit($limit);
+        return $query->limit($limit);
     }
 }
