@@ -7,18 +7,18 @@ use Bermuda\Cycle\Apply\ApplyOffset;
 use Bermuda\Cycle\Selectable;
 use Cycle\Database\Injection\Fragment;
 use Cycle\ORM\ORMInterface;
+use Cycle\ORM\SchemaInterface;
 
 abstract class AbstractFetcher implements OrmAwareInterface
 {
     /**
-     * @var callable
-     */
-    protected $callback;
-
-    /**
      * @var Selectable[]
      */
     protected array $applies = [];
+
+    protected array $columns = [];
+    
+    private ?RowFetcher $rowFetcher = null;
 
     /**
      * @param ORMInterface $orm
@@ -49,43 +49,62 @@ abstract class AbstractFetcher implements OrmAwareInterface
         return $this;
     }
 
-    public function setFetchCallback(callable $callback): void
+    protected function doFetch(QueryInterface $query):? Result
     {
-        $this->callback = static fn(array $row): array => $callback($row);
-    }
+        $pk = $this->orm->getSchema()->define($this->getRole(), SchemaInterface::PRIMARY_KEY);
+        if (is_array($pk)) $pk = $pk[0];
 
-    protected function doFetch(QueryInterface $query, string $role, string $pk = 'id'):? Result
-    {
-        $source = $this->orm->getSource($role);
+        $source = $this->orm->getSource($this->getRole());
         $select  = $source->getDatabase()
-            ->select("{$source->getTable()}.*")
+            ->select($this->columns)
             ->from($source->getTable());
 
         foreach ($query->toArray() as $name => $value) {
-            if (isset($this->applies[$name])) {
-                $select = $this->applies[$name]->apply($select, $value);
-            }
+            if (isset($this->applies[$name])) $select = $this->applies[$name]->apply($select, $value);
         }
-
+        
         $total = (clone $select)->offset()
             ->columns(new Fragment("count(distinct {$source->getTable()}.$pk) as total"))
             ->run()->fetch()['total'];
 
         if ($total > 0) {
             $results = [];
-            foreach ($select as $row) $results[] = ($this->callback)($row);
+            foreach ($select as $row) $results[] = $this->fetchRow($row);
             return new Result($results, $total);
         }
 
         return null;
     }
 
+    /**
+     * @param array $row
+     * @return array
+     */
+    protected function fetchRow(array $row): array
+    {
+        if (!$this->rowFetcher) $this->rowFetcher = new RowFetcher($this->getRole(), $this->orm);
+        return $this->rowFetcher->fetch($row);
+    }
+
     protected function init(): void
     {
+        $this->initColumns();
         $this->add('limit', new ApplyLimit);
         $this->add('offset', new ApplyOffset);
-        $this->callback = static function(array $row): array  {
-            return (new ArrayWrapper($row))->transform(new Transformer)->toArray();
-        };
+    }
+
+    abstract protected function getRole(): string ;
+    
+    protected function initColumns(): void
+    {
+        if ($this->columns == []) {
+            $source = $this->orm->getSource($this->getRole());
+            $columns = $this->orm->getSchema()->define($this->getRole(), SchemaInterface::COLUMNS);
+
+            foreach ($columns as $alias => $column) {
+                if (is_int($alias)) $this->columns[] = "{$source->getTable()}.$column" ;
+                else $this->columns[] = "{$source->getTable()}.$column as $alias" ;
+            }
+        }
     }
 }
