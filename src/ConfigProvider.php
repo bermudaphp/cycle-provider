@@ -51,7 +51,7 @@ class ConfigProvider extends AbstractProvider
                 };
             },
             DatabaseConfig::class => static function (ContainerInterface $container): DatabaseConfig {
-                $config = $container->get('config');
+                $config = $container->get(self::containerConfigKey);
                 if (!isset($config[self::configKey])) {
                     throw new \RuntimeException('Database configuration expected');
                 }
@@ -67,7 +67,7 @@ class ConfigProvider extends AbstractProvider
                 return new DoctrineCollectionFactory();
             },
             SchemaInterface::class => static function (ContainerInterface $container): Schema {
-                $config = $container->get('config');
+                $config = $container->get(self::containerConfigKey);
                 if (!isset($config[self::configKey])) {
                     throw new \RuntimeException('Database configuration expected');
                 }
