@@ -2,7 +2,7 @@
 
 namespace Bermuda\Cycle;
 
-use Bermuda\StdLib\Arrayable;
+use Bermuda\Stdlib\Arrayable;
 
 interface QueryInterface extends Arrayable
 {
