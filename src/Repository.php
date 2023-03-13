@@ -6,7 +6,7 @@ use Cycle\ORM\EntityManager;
 use Cycle\ORM\EntityManagerInterface;
 use Cycle\ORM\ORMInterface;
 
-abstract class Repository extends Select\Repository
+abstract class Repository extends \Cycle\ORM\Select\Repository
 {
     protected ORMInterface $orm;
     protected EntityManagerInterface $entityManager;
