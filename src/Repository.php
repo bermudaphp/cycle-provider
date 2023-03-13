@@ -2,6 +2,7 @@
 
 namespace Bermuda\Cycle;
 
+use Cycle\ORM\Select;
 use Cycle\ORM\EntityManager;
 use Cycle\ORM\EntityManagerInterface;
 use Cycle\ORM\ORMInterface;
