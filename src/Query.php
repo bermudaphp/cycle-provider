@@ -14,7 +14,7 @@ class Query implements QueryInterface
         return $this->data;
     }
 
-    public function get(string $name, mixed $default = null)
+    public function get(string $name, mixed $default = null): mixed
     {
         return $this->data[$name] ?? $default;
     }
