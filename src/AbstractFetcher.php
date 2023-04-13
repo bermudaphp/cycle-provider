@@ -49,7 +49,7 @@ abstract class AbstractFetcher implements OrmAwareInterface
         return $this;
     }
 
-    protected function doFetch(QueryInterface $query):? Result
+    protected function doFetch(?QueryInterface $query):? Result
     {
         $pk = $this->orm->getSchema()->define($this->getRole(), SchemaInterface::PRIMARY_KEY);
         if (is_array($pk)) $pk = $pk[0];
@@ -59,8 +59,10 @@ abstract class AbstractFetcher implements OrmAwareInterface
             ->select($this->columns)
             ->from($source->getTable());
 
-        foreach ($query->toArray() as $name => $value) {
-            if (isset($this->applies[$name])) $select = $this->applies[$name]->apply($select, $value);
+        if ($query !== null) {
+            foreach ($query->toArray() as $name => $value) {
+                if (isset($this->applies[$name])) $select = $this->applies[$name]->apply($select, $value);
+            }
         }
         
         $total = (clone $select)->offset()
