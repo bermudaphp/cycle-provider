@@ -6,8 +6,10 @@ use Bermuda\Cycle\Apply\ApplyLimit;
 use Bermuda\Cycle\Apply\ApplyOffset;
 use Bermuda\Cycle\Selectable;
 use Cycle\Database\Injection\Fragment;
+use Cycle\Database\Query\SelectQuery;
 use Cycle\ORM\ORMInterface;
 use Cycle\ORM\SchemaInterface;
+use Cycle\ORM\Select\SourceInterface;
 
 abstract class AbstractFetcher implements OrmAwareInterface
 {
@@ -49,15 +51,20 @@ abstract class AbstractFetcher implements OrmAwareInterface
         return $this;
     }
 
+    protected function select(SourceInterface $source): SelectQuery
+    {
+        return $source->getDatabase()
+            ->select($this->columns)
+            ->from($source->getTable());
+    }
+
     protected function doFetch(?QueryInterface $query):? Result
     {
         $pk = $this->orm->getSchema()->define($this->getRole(), SchemaInterface::PRIMARY_KEY);
         if (is_array($pk)) $pk = $pk[0];
 
         $source = $this->orm->getSource($this->getRole());
-        $select  = $source->getDatabase()
-            ->select($this->columns)
-            ->from($source->getTable());
+        $select = $this->select($source);
 
         if ($query !== null) {
             foreach ($query->toArray() as $name => $value) {
