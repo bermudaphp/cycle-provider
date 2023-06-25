@@ -67,9 +67,8 @@ abstract class AbstractFetcher implements OrmAwareInterface
         $select = $this->select($source);
 
         $select = $this->apply($query, $select);
-        $count = $this->countRows($select);
-
-        if (($count = $this->countRows($select)) > 0) {
+        
+        if (($count = $this->countRows($select, $source)) > 0) {
             $results = [];
             foreach ($select as $row) $results[] = $this->getRowFetcher()->fetch($row);
             return new Result($results, $total);
@@ -99,7 +98,7 @@ abstract class AbstractFetcher implements OrmAwareInterface
         return $select;
     }
 
-    protected function countRows(SelectQuery $query): int
+    protected function countRows(SelectQuery $select, SourceInterface $source): int
     {
         return (clone $select)->offset()
             ->columns(new Fragment("count(distinct {$source->getTable()}.$pk) as count"))
