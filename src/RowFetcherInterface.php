@@ -2,7 +2,7 @@
 
 namespace Bermuda\Cycle;
 
-interface FetcherInterface
+interface RowFetcherInterface
 {
     public function fetch(array $row): array ;
 }
