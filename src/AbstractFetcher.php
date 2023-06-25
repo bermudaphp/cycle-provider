@@ -66,7 +66,7 @@ abstract class AbstractFetcher implements OrmAwareInterface
         $source = $this->orm->getSource($this->getRole());
         $select = $this->select($source);
 
-        $this->apply($query);
+        $select = $this->apply($query);
         $count = $this->countRows($select);
 
         if (($count = $this->countRows($select)) > 0) {
@@ -83,8 +83,8 @@ abstract class AbstractFetcher implements OrmAwareInterface
         if (!$this->rowFetcher) $this->rowFetcher = new RowFetcher($this->getRole(), $this->orm);
         return $this->rowFetcher;
     }
-    
-    protected function apply(?QueryInterface $query)
+
+    protected function apply(?QueryInterface $query, SelectQuery $select): SelectQuery
     {
         if (!$query) return;
         foreach ($query->toArray() as $name => $value) {
@@ -95,6 +95,8 @@ abstract class AbstractFetcher implements OrmAwareInterface
                 }
             }
         }
+        
+        return $select;
     }
 
     protected function countRows(SelectQuery $query): int
