@@ -66,38 +66,42 @@ abstract class AbstractFetcher implements OrmAwareInterface
         $source = $this->orm->getSource($this->getRole());
         $select = $this->select($source);
 
-        if ($query !== null) {
-            foreach ($query->toArray() as $name => $value) {
-                if (isset($this->applies[$name])) {
-                    $select = $this->applies[$name]->apply($select, $value);
-                    if ($this->applies[$name] instanceof RowFetcherInterface) {
-                        $this->getRowFetcher()->add($this->applies[$name]);
-                    }
-                } 
-            }
-        }
-        
-        $total = (clone $select)->offset()
-            ->columns(new Fragment("count(distinct {$source->getTable()}.$pk) as total"))
-            ->run()->fetch()['total'];
+        $this->apply($query);
+        $count = $this->countRows($select);
 
-        if ($total > 0) {
+        if (($count = $this->countRows($select)) > 0) {
             $results = [];
-            foreach ($select as $row) $results[] = $this->fetchRow($row);
+            foreach ($select as $row) $results[] = $this->getRowFetcher()->fetch($row);
             return new Result($results, $total);
         }
 
         return null;
     }
 
-    /**
-     * @param array $row
-     * @return array
-     */
-    protected function fetchRow(array $row): array
+    protected function getRowFetcher(): RowFetcherInterface
     {
         if (!$this->rowFetcher) $this->rowFetcher = new RowFetcher($this->getRole(), $this->orm);
-        return $this->rowFetcher->fetch($row);
+        return $this->rowFetcher;
+    }
+    
+    protected function apply(?QueryInterface $query)
+    {
+        if (!$query) return;
+        foreach ($query->toArray() as $name => $value) {
+            if (isset($this->applies[$name])) {
+                $select = $this->applies[$name]->apply($select, $value);
+                if ($this->applies[$name] instanceof RowFetcherInterface) {
+                    $this->getRowFetcher()->add($this->applies[$name]);
+                }
+            }
+        }
+    }
+
+    protected function countRows(SelectQuery $query): int
+    {
+        return (clone $select)->offset()
+            ->columns(new Fragment("count(distinct {$source->getTable()}.$pk) as count"))
+            ->run()->fetch()['count'];
     }
 
     protected function init(): void
