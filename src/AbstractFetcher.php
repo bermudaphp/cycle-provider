@@ -20,7 +20,7 @@ abstract class AbstractFetcher implements OrmAwareInterface
 
     protected array $columns = [];
     
-    private ?RowFetcher $rowFetcher = null;
+    protected ?RowFetcher $rowFetcher = null;
 
     /**
      * @param ORMInterface $orm
