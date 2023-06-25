@@ -60,18 +60,19 @@ abstract class AbstractFetcher implements OrmAwareInterface
 
     protected function doFetch(?QueryInterface $query):? Result
     {
-        $pk = $this->orm->getSchema()->define($this->getRole(), SchemaInterface::PRIMARY_KEY);
-        if (is_array($pk)) $pk = $pk[0];
-
         $source = $this->orm->getSource($this->getRole());
-        $select = $this->select($source);
 
+        $pk = $this->orm->getSchema()->define($this->getRole(), SchemaInterface::PRIMARY_KEY);
+        if (is_array($pk)) $pk = "{$source->getTable()}.$pk[0]";
+        else $pk = "{$source->getTable()}.$pk";
+
+        $select = $this->select($source);
         $select = $this->apply($query, $select);
-        
-        if (($count = $this->countRows($select, $source)) > 0) {
+
+        if (($count = $this->countRows($select, $pk)) > 0) {
             $results = [];
             foreach ($select as $row) $results[] = $this->getRowFetcher()->fetch($row);
-            return new Result($results, $total);
+            return new Result($results, $count);
         }
 
         return null;
@@ -98,10 +99,10 @@ abstract class AbstractFetcher implements OrmAwareInterface
         return $select;
     }
 
-    protected function countRows(SelectQuery $select, SourceInterface $source): int
+    protected function countRows(SelectQuery $select, string $primaryKey): int
     {
         return (clone $select)->offset()
-            ->columns(new Fragment("count(distinct {$source->getTable()}.$pk) as count"))
+            ->columns(new Fragment("count(distinct $primaryKey) as count"))
             ->run()->fetch()['count'];
     }
 
