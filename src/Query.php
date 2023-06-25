@@ -11,11 +11,16 @@ class Query implements QueryInterface
 
     public function toArray(): array
     {
-        return $this->data;
+        return array_merge($this->data, get_object_vars($this));
     }
 
     public function get(string $name, mixed $default = null): mixed
     {
         return $this->data[$name] ?? $default;
+    }
+
+    public function has(string $name): bool
+    {
+        return array_key_exists($name, $this->data);
     }
 }
