@@ -6,10 +6,11 @@ use Cycle\ORM\ORMInterface;
 use Cycle\ORM\Parser\CastableInterface;
 use Cycle\ORM\SchemaInterface;
 
-class RowFetcher
+class RowFetcher implements RowFetcherInterface
 {
+    protected array $fetchers = [];
     protected CastableInterface $handler;
-
+    
     public function __construct(
         public readonly string $role,
         public readonly ORMInterface $orm
@@ -21,6 +22,15 @@ class RowFetcher
 
     public function fetch(array $row): array
     {
-        return $this->handler->cast(array_filter($row, static fn($v) => $v !== null));
+        $row = $this->handler->cast(array_filter($row, static fn($v) => $v !== null));
+        foreach ($this->fetchers as $fetcher) $row = $fetcher->fetch($row);
+
+        return $row;
+    }
+    
+    public function add(FetcherInterface $fetcher): static
+    {
+        $this->fetchers[] = $fetcher;
+        return $this;
     }
 }
