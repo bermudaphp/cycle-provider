@@ -86,7 +86,7 @@ abstract class AbstractFetcher implements OrmAwareInterface
 
     protected function apply(?QueryInterface $query, SelectQuery $select): SelectQuery
     {
-        if (!$query) return;
+        if (!$query) return $select;
         foreach ($query->toArray() as $name => $value) {
             if (isset($this->applies[$name])) {
                 $select = $this->applies[$name]->apply($select, $value);
