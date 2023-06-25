@@ -66,7 +66,7 @@ abstract class AbstractFetcher implements OrmAwareInterface
         $source = $this->orm->getSource($this->getRole());
         $select = $this->select($source);
 
-        $select = $this->apply($query);
+        $select = $this->apply($query, $select);
         $count = $this->countRows($select);
 
         if (($count = $this->countRows($select)) > 0) {
@@ -95,7 +95,7 @@ abstract class AbstractFetcher implements OrmAwareInterface
                 }
             }
         }
-        
+
         return $select;
     }
 
