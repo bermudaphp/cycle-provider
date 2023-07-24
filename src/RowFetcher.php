@@ -13,11 +13,18 @@ class RowFetcher implements RowFetcherInterface
     
     public function __construct(
         public readonly string $role,
-        public readonly ORMInterface $orm
+        public readonly ORMInterface $orm,
+        array $exceptedRules = []
     ) {
         $handler = $orm->getSchema()->define($role, SchemaInterface::TYPECAST_HANDLER);
         $this->handler = new $handler($orm->getSource($role)->getDatabase());
-        $this->handler->setRules($orm->getSchema()->define($role, SchemaInterface::TYPECAST));
+
+        $rules = $orm->getSchema()->define($role, SchemaInterface::TYPECAST);
+        if ($exceptedRules !== []) {
+            $rules = array_diff_key($rules, array_flip($exceptedRules));
+        }
+
+        $this->handler->setRules($rules);
     }
 
     public function fetch(array $row): array
