@@ -92,7 +92,7 @@ abstract class AbstractFetcher implements OrmAwareInterface
             if (isset($this->applies[$name])) {
                 $select = $this->applies[$name]->apply($select, $value);
                 if ($this->applies[$name] instanceof RowFetcherInterface) {
-                    $this->getRowFetcher()->add($this->applies[$name]);
+                    $this->getRowFetcher()->extend($this->applies[$name]);
                 }
             }
         }
