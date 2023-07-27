@@ -12,7 +12,7 @@ use Cycle\ORM\ORMInterface;
 use Cycle\ORM\SchemaInterface;
 use Cycle\ORM\Select\SourceInterface;
 
-abstract class AbstractFetcher implements OrmAwareInterface
+abstract class DataFetcher implements OrmAwareInterface
 {
     /**
      * @var Selectable[]
@@ -79,7 +79,7 @@ abstract class AbstractFetcher implements OrmAwareInterface
         return null;
     }
 
-    protected function getRowFetcher(): RowFetcherInterface
+    protected function getRowFetcher(): RowFetcher
     {
         if (!$this->rowFetcher) $this->rowFetcher = new RowFetcher($this->getRole(), $this->orm);
         return $this->rowFetcher;
