@@ -3,7 +3,7 @@
 namespace Bermuda\Cycle;
 
 use Cycle\Database\Injection\Fragment;
-use Cycle\Database\Query\SelectQuery
+use Cycle\Database\Query\SelectQuery;
 
 final class Counter extends SelectQuery
 {
