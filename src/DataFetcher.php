@@ -7,7 +7,6 @@ use Bermuda\Cycle\Apply\ApplyOffset;
 use Bermuda\Cycle\Selectable;
 use Cycle\Database\Injection\Fragment;
 use Cycle\Database\Query\SelectQuery;
-use SelectQuery as Counter;
 use Cycle\ORM\ORMInterface;
 use Cycle\ORM\SchemaInterface;
 use Cycle\ORM\Select\SourceInterface;
