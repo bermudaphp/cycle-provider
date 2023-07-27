@@ -7,6 +7,7 @@ use Bermuda\Cycle\Apply\ApplyOffset;
 use Bermuda\Cycle\Selectable;
 use Cycle\Database\Injection\Fragment;
 use Cycle\Database\Query\SelectQuery;
+use SelectQuery as Counter;
 use Cycle\ORM\ORMInterface;
 use Cycle\ORM\SchemaInterface;
 use Cycle\ORM\Select\SourceInterface;
@@ -101,9 +102,7 @@ abstract class AbstractFetcher implements OrmAwareInterface
 
     protected function countRows(SelectQuery $select, string $primaryKey): int
     {
-        return (clone $select)->offset()
-            ->columns(new Fragment("count(distinct $primaryKey) as count"))
-            ->run()->fetch()['count'];
+        return Counter::countDistinct($select, $primaryKey);
     }
 
     protected function init(): void
