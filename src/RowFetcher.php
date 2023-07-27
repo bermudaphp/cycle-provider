@@ -35,7 +35,7 @@ class RowFetcher implements RowFetcherInterface
         return $row;
     }
     
-    public function add(RowFetcherInterface $fetcher): static
+    public function extend(RowFetcherInterface $fetcher): RowFetcherInterface
     {
         $this->fetchers[] = $fetcher;
         return $this;
