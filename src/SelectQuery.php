@@ -2,11 +2,12 @@
 
 namespace Bermuda\Cycle;
 
-use Cycle\Database\Injection\Fragment;
+use \Cycle\Database\Injection\Fragment;
+use \Cycle\Database\Query\SelectQuery
 
-final class SelectQuery extends \Cycle\Database\Query\SelectQuery
+final class Counter extends 
 {
-    public static function countDistinct(\Cycle\Database\Query\SelectQuery $select, string $column): int
+    public static function countDistinct(SelectQuery $select, string $column): int
     {
         $select = clone $select;
 
