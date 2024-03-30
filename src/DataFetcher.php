@@ -28,7 +28,10 @@ abstract class DataFetcher implements OrmAwareInterface
      */
     public function __construct(
         protected ORMInterface $orm,
-        array $applies = []
+        array $applies = [
+            'limit' => new ApplyLimit,
+            'offset' => new ApplyOffset,
+        ]
     ) {
         $this->init();
         foreach ($applies as $name => $apply) $this->add($name, $apply);
@@ -58,21 +61,41 @@ abstract class DataFetcher implements OrmAwareInterface
             ->from($source->getTable());
     }
 
-    protected function doFetch(?QueryInterface $query):? Result
+    protected function formQuery(?QueryInterface $query): SelectQuery
     {
-        $source = $this->orm->getSource($this->getRole());
+        $select = $this->select($this->getSource());
+        return $this->apply($query, $select);
+    }
 
+    protected function getSource(): SourceInterface
+    {
+        return $this->orm->getSource($this->getRole());
+    }
+
+    protected function getPrimaryKey(): string
+    {
         $pk = $this->orm->getSchema()->define($this->getRole(), SchemaInterface::PRIMARY_KEY);
-        if (is_array($pk)) $pk = "{$source->getTable()}.$pk[0]";
-        else $pk = "{$source->getTable()}.$pk";
 
-        $select = $this->select($source);
-        $select = $this->apply($query, $select);
+        if (is_array($pk)) $pk = "{$this->getSource()->getTable()}.$pk[0]";
+        else $pk = "{$this->getSource()->getTable()}.$pk";
 
-        if (($count = $this->countRows($select, $pk)) > 0) {
-            $results = [];
-            foreach ($select as $row) $results[] = $this->getRowFetcher()->fetch($row);
-            return new Result($results, $count);
+        return $pk;
+    }
+
+    protected function fetchResults(iterable $rows, int $count, ?QueryInterface $query): Result
+    {
+        $results = [];
+        foreach ($rows as $row) $results[] = $this->getRowFetcher()->fetch($row);
+        return new Result($results, $count);
+    }
+
+    protected function doFetch(?QueryInterface $query, bool $onlyCont = false):? Result
+    {
+        $select = $this->formQuery($query);
+        $count = $this->countRows($select);
+        if ($onlyCont) return new Result([], $count);
+        if ($count > 0) {
+            return $this->fetchResults($select, $count, $query);
         }
 
         return null;
@@ -99,19 +122,31 @@ abstract class DataFetcher implements OrmAwareInterface
         return $select;
     }
 
-    protected function countRows(SelectQuery $select, string $primaryKey): int
+    protected function countRows(SelectQuery $select): int
     {
-        return Counter::countDistinct($select, $primaryKey);
+        return Counter::countDistinct($select, $this->getPrimaryKey());
     }
 
     protected function init(): void
     {
         $this->initColumns();
-        $this->add('limit', new ApplyLimit);
-        $this->add('offset', new ApplyOffset);
+        $this->applies = $this->getApplies();
+    }
+
+    /**
+     * @return Selectable[]
+     */
+    protected function getApplies(): array
+    {
+        return [];
     }
 
     abstract protected function getRole(): string ;
+
+    protected function exceptedColumns(): array
+    {
+        return [];
+    }
     
     protected function initColumns(): void
     {
@@ -119,7 +154,10 @@ abstract class DataFetcher implements OrmAwareInterface
             $source = $this->orm->getSource($this->getRole());
             $columns = $this->orm->getSchema()->define($this->getRole(), SchemaInterface::COLUMNS);
 
+            $excepted = $this->exceptedColumns();
+
             foreach ($columns as $alias => $column) {
+                if (in_array($column, $excepted)) continue;
                 if (is_int($alias)) $this->columns[] = "{$source->getTable()}.$column" ;
                 else $this->columns[] = "{$source->getTable()}.$column as $alias" ;
             }
