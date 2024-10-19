@@ -93,6 +93,7 @@ abstract class DataFetcher implements OrmAwareInterface
     {
         $select = $this->formQuery($query);
         $count = $this->countRows($select);
+        if ($query->get('offset', 10) > $count) $count = 0;
         if ($onlyCont) return new Result([], $count);
         if ($count > 0) {
             return $this->fetchResults($select, $count, $query);
