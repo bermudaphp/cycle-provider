@@ -1,13 +1,13 @@
 <?php
 
-namespace api\typecast;
+namespace Bermuda\Cycle\Typecast;
 
-use api\typecast\rules\ArrayRule;
-use api\typecast\rules\BooleanRule;
-use api\typecast\rules\CarbonRule;
-use api\typecast\rules\FloatRule;
-use api\typecast\rules\IntRule;
-use api\typecast\rules\UuidRule;
+use Bermuda\Cycle\Typecast\Rules\ArrayRule;
+use Bermuda\Cycle\Typecast\Rules\BooleanRule;
+use Bermuda\Cycle\Typecast\Rules\CarbonRule;
+use Bermuda\Cycle\Typecast\Rules\FloatRule;
+use Bermuda\Cycle\Typecast\Rules\IntRule;
+use Bermuda\Cycle\Typecast\Rules\UuidRule;
 
 final class RuleCollector
 {
