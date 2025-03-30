@@ -2,9 +2,7 @@
 
 namespace Bermuda\Cycle;
 
-use Bermuda\HTTP\HttpException;
-
-class EntityNotFoundException extends HttpException 
+class EntityNotFoundException extends \RuntimeException
 {
     public function __construct(
         public readonly string $role, 
