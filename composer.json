@@ -3,7 +3,9 @@
     "license": "MIT",
     "autoload": {
         "psr-4": {
-            "Bermuda\\Cycle\\": "src/"
+            "Bermuda\\Cycle\\": "src/",
+            "Bermuda\\Cycle\\Typecast\\": "src/typecast/",
+             "Bermuda\\Cycle\\Typecast\\Rules\\": "src/typecast/rules/",
         }
     },
     "require": {
