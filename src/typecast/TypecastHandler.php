@@ -1,6 +1,6 @@
 <?php
 
-namespace api\typecast;
+namespace Bermuda\Cycle\Typecast;
 
 use Cycle\ORM\Parser\CastableInterface;
 use Cycle\ORM\Parser\UncastableInterface;
