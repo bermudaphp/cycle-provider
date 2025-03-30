@@ -2,6 +2,7 @@
 
 namespace Bermuda\Cycle\Apply;
 
+use Bermuda\Cycle\Selectable;
 use Cycle\Database\Query\SelectQuery;
 
 final class ApplyBetween implements Selectable
