@@ -18,7 +18,7 @@ final class ApplyIn implements Selectable
      * @param array $values
      * @return SelectQuery
      */
-    public function __invoke(SelectQuery $select, mixed $values): SelectQuery
+    public function apply(SelectQuery $select, mixed $values): SelectQuery
     {
         return $select->where($this->column, 'in', new Parameter($values));
     }
