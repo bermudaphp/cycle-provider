@@ -1,6 +1,6 @@
 <?php
 
-namespace api\typecast;
+namespace Bermuda\Cycle\Typecast;
 
 interface RuleInterface
 {
