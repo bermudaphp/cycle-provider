@@ -1,10 +1,10 @@
 <?php
 
-namespace api\typecast\rules;
+namespace Bermuda\Cycle\Typecast\Rules;
 
 use Bermuda\Clock\Clock;
 use Carbon\CarbonInterface;
-use api\typecast\RuleInterface;
+use Bermuda\Cycle\Typecast\RuleInterface;
 
 final class CarbonRule implements RuleInterface
 {
