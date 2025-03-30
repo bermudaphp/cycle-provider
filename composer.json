@@ -5,7 +5,7 @@
         "psr-4": {
             "Bermuda\\Cycle\\": "src/",
             "Bermuda\\Cycle\\Typecast\\": "src/typecast/",
-             "Bermuda\\Cycle\\Typecast\\Rules\\": "src/typecast/rules/",
+             "Bermuda\\Cycle\\Typecast\\Rules\\": "src/typecast/rules/"
         }
     },
     "require": {
@@ -13,8 +13,10 @@
         "bermudaphp/config": "^1.1.3",
         "bermudaphp/http-exception": "^1.0",
         "bermudaphp/arrayable": "^1.0",
+        "bermudaphp/clock": "^1.0",
         "cycle/orm": "^2.2.2",
         "cycle/migrations": "^4.0.1",
-        "doctrine/collections": "^1.6.8"
+        "doctrine/collections": "^1.6.8",
+        "ramsey/uuid": "^4.7.6"
     }
 }
