@@ -1,10 +1,10 @@
 <?php
 
-namespace api\typecast\rules;
+namespace Bermuda\Cycle\Typecast\Rules;
 
-use api\typecast\RuleInterface;
 use Ramsey\Uuid\UuidFactory;
 use Ramsey\Uuid\UuidInterface;
+use Bermuda\Cycle\Typecast\RuleInterface;
 
 final class UuidRule implements RuleInterface
 {
