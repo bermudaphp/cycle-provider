@@ -79,7 +79,7 @@ class ConfigProvider extends AbstractProvider
         if (!isset($config[self::CONFIG_KEY])) {
             throw new \RuntimeException('Database configuration expected');
         }
-        return new DatabaseConfig($config[self::CONFIG_KEY][0]->toArray());
+        return new DatabaseConfig($config->get(self::CONFIG_KEY)[0]);
     }
 
     public static function createHeap(ContainerInterface $container): Heap
